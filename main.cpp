@@ -1,14 +1,15 @@
 #include <iostream>
 using namespace std;
 
-
 void printWelcome() {
+    //print welcome message.
     cout << "Välkommen, detta program räknar ut antal sedlar och mynt som en kund får tillbaka vid köp. " << endl;
     cout << "Vänligen följ angivna instruktioner" << endl;
 }
 
-int getInteger() {
-    int input = 0;
+long getInteger() {
+    //Get only integers, prints error message if not int.
+    long input = 0;
     while(true) {
         if (cin >> input) {
             return input;
@@ -22,8 +23,9 @@ int getInteger() {
     }
     }
 
-int getTotal(int balance){
-    int numProducts;
+long getTotal(long balance){
+    // Get number of vares and updates balance.
+    long numProducts;
     cout << "Ange antal varor: ";
     numProducts = getInteger();
     for (int i = 1; i < numProducts + 1; i++) {
@@ -34,8 +36,8 @@ int getTotal(int balance){
     return balance;
 }
 
-
-int getMore(int balance) {
+long getMore(long balance) {
+    // Ask for more money.
     while (balance< 0) {
             cout << "Kvar att betala: " << balance * -1 << "sek"<< endl;
             cout << "Ange mottaget belopp:";
@@ -44,13 +46,12 @@ int getMore(int balance) {
     return balance;
 }
 
-void printChange( int balance) {
+void printChange( long balance) {
         int denominations[] = {1000, 500, 100, 50, 20, 10, 5, 1};
         int denom_back;
         cout << "Totalt tillbaka: " << balance << "kr\n";
         cout << "Valörer: \n";
         for (int denomination: denominations) {
-            // Deconstructed modulus.
             denom_back = balance / denomination;
             balance = balance % denomination;
             // Only print what costumer needs back.
@@ -83,12 +84,12 @@ bool askRestart() {
 }
 
 int main() {
-    int balance = 0;
     bool on = true;
 
     printWelcome();
 
     while (on) {
+        long balance = 0;
         balance = getTotal(balance);
         cout << "Ange mottaget belopp:";
         balance += getInteger();
