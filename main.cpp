@@ -3,11 +3,7 @@ using namespace std;
 
 void printWelcome() {
     //print welcome message.
-<<<<<<< HEAD
     cout << "Välkommen, detta program räknar ut antal\nsedlar och mynt som en kund får tillbaka vid köp. " << endl;
-=======
-    cout << "Välkommen, detta program räknar ut antal sedlar och mynt som en kund får tillbaka vid köp. " << endl;
->>>>>>> main
     cout << "Vänligen följ angivna instruktioner" << endl;
 }
 
@@ -27,7 +23,6 @@ long getInteger() {
     }
 }
 
-<<<<<<< HEAD
 bool checkPrice( long price){
         cout << "OBS! Kontrollera pris." << endl;
         cout << "Angivet pris: " << price << endl;
@@ -50,9 +45,6 @@ bool checkPrice( long price){
             }
         }
 }
-
-=======
->>>>>>> main
 long getTotal(long balance){
     // Get number of vares and updates balance.
     long numProducts;
