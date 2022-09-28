@@ -1,4 +1,6 @@
 #include <iostream>
+#include<cstring>
+#include<cmath>
 using namespace std;
 
 void printWelcome() {
@@ -7,26 +9,49 @@ void printWelcome() {
     cout << "Vänligen följ angivna instruktioner" << endl;
 }
 
-long getInteger() {
+float getFloat() {
     //Get only integers, prints error message if not int.
-    long input = 0;
+    string input;
+    float converted_input;
     while(true) {
-        if (cin >> input) {
-            return input;
+        cin >> input;
+        try {
+            converted_input = stof(input);
+            return converted_input;
+        } catch (exception error_message) {
+            cout << "Fel, försök igen." << endl;
         }
-        else {
-            cout << "Programmet tar bara emot heltal, försök igen.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
-            input = 0;
-        }
+             
     }
 }
 
-bool checkPrice( long price){
-        cout << "OBS! Kontrollera pris." << endl;
-        cout << "Angivet pris: " << price << endl;
-        cout << "Vill du fortsätta) (y/n)" << endl;
+bool isInt(string num) {
+    bool is_int = true;
+    for (char n: num) {
+        if (!(isdigit(n))) {
+            is_int = false;
+        }
+    }
+    return is_int;
+}
+
+int getInteger() {
+    //Get only integers, prints error message if not int.
+    string input;
+    int converted_input;
+    while(true) {
+        cin >> input;
+        if (!(isInt(input))) {
+            cout << "Fel, försök igen." << endl;
+            continue;
+        } else {
+            converted_input = stoi(input);
+            return converted_input;
+        } 
+    }
+}
+
+bool getYesNo(){
         string ans;
         while (true) {
             if (cin >> ans) {
@@ -45,15 +70,24 @@ bool checkPrice( long price){
             }
         }
 }
-long getTotal(long balance){
+
+bool checkPrice( float price){
+        cout << "\nOBS! Kontrollera pris." << endl;
+        cout << "Angivet pris: " << price << endl;
+        cout << "Vill du fortsätta) (y/n)" << endl;
+        bool ans = getYesNo();
+        return ans;
+        
+}
+float getTotal(float balance){
     // Get number of vares and updates balance.
-    long numProducts;
+    int numProducts;
     cout << "Ange antal varor: ";
     numProducts = getInteger();
     for (int i = 1; i < numProducts + 1; i++) {
-        long price = 0;
+        float price = 0;
         cout << "Kostnad vara " << i << ": ";
-        price = getInteger();
+        price = getFloat();
         if (price > 0) {
             balance -= price;
         }
@@ -64,33 +98,58 @@ long getTotal(long balance){
             i--;
             } 
         }
-        cout << "Att betala: " << balance * -1 << endl;
+        if (i < numProducts){
+            cout << "Att betala: " << balance * -1 << "sek" << endl;
+        }
     }
     return balance;
 }
 
-long getMore(long balance) {
+float getMore(float balance) {
     // Ask for more money.
     while (balance< 0) {
             cout << "Att betala: " << balance * -1 << "sek"<< endl;
             cout << "Ange mottaget belopp:";
-            balance += getInteger();
+            balance += getFloat();
     }
     return balance;
 }
 
-void printChange( long balance) {
-        int denominations[] = {1000, 500, 100, 50, 20, 10, 5, 1};
-        int denom_back;
-        cout << "Åter: " << balance << "kr\n";
-        cout << "Valörer: \n";
-        for (int denomination: denominations) {
-            denom_back = balance / denomination;
-            balance = balance % denomination;
-            // Only print what costumer needs back.
-            if (denom_back > 0) {
-                cout << denom_back << "x" << denomination << "kr" << endl;
+void printChange(float balance) {
+        float denominations[] = {1000, 500, 100, 50, 20, 10, 5, 1, 0.5};
+        float denom_back;
+        bool rounded = false;
+
+        //Rounding
+        if ((balance - (int)balance > 0)){
+            float rest = balance - (int)balance;
+            if (rest >= 0.75){
+                balance = int(balance) + 1;
             }
+            if (rest < 0.75 && rest >= 0.25){
+                balance = int(balance) + 0.5;
+            }
+            if (rest < 0.25){
+                balance = int(balance);
+            }
+        }
+        cout << "\nÅter: " << balance << "kr\n";
+        cout << "Valörer: \n";
+        for (float denomination: denominations) {
+            if (denomination >= 1) {
+                denom_back = (int)balance / (int)denomination;
+            } else if (denomination == 0.5) {
+                denom_back = balance / denomination;
+            }
+            if (denom_back > 0) {
+                if (denomination >= 1){
+                    cout << denom_back << "x" << denomination << "kr" << endl;
+                } else if (denomination == 0.5){
+                    cout << denom_back << "x" << denomination * 100 << "öre" << endl;
+                }
+            }
+            balance = fmod((double)balance, double(denomination));
+
         }
 }
 
@@ -98,22 +157,8 @@ bool askRestart() {
     //Asks if user wants to make another purchase.
     string input;
     cout << "Vill du göra ett nytt köp? (y/n)" << endl;
-    while (true) {
-        if (cin >> input) {
-            if (input == "y") {
-                return true;
-            }
-            if (input == "n") {
-                return false;
-            } else {
-                cout << "Var god svara med y för ja eller n för nej.\n";
-            }
-        } else {
-            cout << "Var god svara med y för ja eller n för nej\n";
-            cin.clear();
-            cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
-        }
-    }
+    bool ans = getYesNo();
+    return ans;
 }
 
 int main() {
@@ -122,11 +167,13 @@ int main() {
     printWelcome();
 
     while (on) {
-        long balance = 0;
+        float balance;
         balance = getTotal(balance);
-        cout << "Ange mottaget belopp:";
-        balance += getInteger();
-        
+
+        if (balance > 0) {
+            cout << "Ange mottaget belopp:";
+            balance += getFloat();
+        }
         //Low balance
         if (balance < 0) {
             balance = getMore(balance);
