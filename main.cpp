@@ -9,23 +9,11 @@ void printWelcome() {
     cout << "Vänligen följ angivna instruktioner" << endl;
 }
 
-float getFloat() {
-    //Get only integers, prints error message if not int.
-    string input;
-    float converted_input;
-    while(true) {
-        cin >> input;
-        try {
-            converted_input = stof(input);
-            return converted_input;
-        } catch (exception error_message) {
-            cout << "Fel, försök igen." << endl;
-        }
-             
-    }
+void printGoodbye(){
+    cout << "Välkommen åter!";
 }
 
-bool isInt(string num) {
+bool isNum(string num) {
     bool is_int = true;
     for (char n: num) {
         if (!(isdigit(n))) {
@@ -35,19 +23,26 @@ bool isInt(string num) {
     return is_int;
 }
 
-int getInteger() {
+float getFloat() {
     //Get only integers, prints error message if not int.
     string input;
-    int converted_input;
+    float rounded;
+    float converted_input;
     while(true) {
         cin >> input;
-        if (!(isInt(input))) {
-            cout << "Fel, försök igen." << endl;
-            continue;
-        } else {
-            converted_input = stoi(input);
-            return converted_input;
-        } 
+        try {
+            if (!(isNum(input))){
+                cout << "Felaktigt format.\nFörsök igen: ";
+            } else {
+                converted_input = stof(input);
+                rounded = converted_input * 100;
+                rounded = (int)rounded / 100.0;
+                return rounded;
+            }
+        } catch (exception error_message) {
+            cout << "Felaktigt format.\nFörsök igen: ";
+        }
+             
     }
 }
 
@@ -55,16 +50,16 @@ bool getYesNo(){
         string ans;
         while (true) {
             if (cin >> ans) {
-                if (ans == "y") {
+                if (ans == "j") {
                     return true;
                 }
                 if (ans == "n") {
                     return false;
                 } else {
-                    cout << "Var god svara med y för ja eller n för nej.\n";
+                    cout << "j = Ja n = Nej.\n";
                 }
             } else {
-                cout << "Var god svara med y för ja eller n för nej\n";
+                cout << "j = Ja n = Nej\n";
                 cin.clear();
                 cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
             }
@@ -73,49 +68,45 @@ bool getYesNo(){
 
 bool checkPrice( float price){
         cout << "\nOBS! Kontrollera pris." << endl;
-        cout << "Angivet pris: " << price << endl;
-        cout << "Vill du fortsätta) (y/n)" << endl;
+        cout << "ANGIVET PRIS: " << price << endl;
+        cout << "Vill du fortsätta) (j/n)" << endl;
         bool ans = getYesNo();
         return ans;
         
 }
-float getTotal(float balance){
+float getTotal(double balance){
     // Get number of vares and updates balance.
-    int numProducts;
-    cout << "Ange antal varor: ";
-    numProducts = getInteger();
-    for (int i = 1; i < numProducts + 1; i++) {
-        float price = 0;
+    int i = {1};
+    float price;
+    cout << "För att gå till betalning, ange 0." << endl;
+    do {
         cout << "Kostnad vara " << i << ": ";
         price = getFloat();
-        if (price > 0) {
-            balance -= price;
-        }
-        if (price < 0) {
+        if (price < 0){
             if (checkPrice(price)){
-            balance -= price;
+                balance = balance + price;
             } else {
-            i--;
-            } 
+                continue;
+            }
+        } else {
+            balance = balance + price;
         }
-        if (i < numProducts){
-            cout << "Att betala: " << balance * -1 << "sek" << endl;
-        }
-    }
-    return balance;
+        i++;
+    } while (price != 0);
+    return -balance;
 }
 
-float getMore(float balance) {
+float getMore(double balance) {
     // Ask for more money.
     while (balance< 0) {
             cout << "Att betala: " << balance * -1 << "sek"<< endl;
-            cout << "Ange mottaget belopp:";
+            cout << "Ange mottaget belopp: ";
             balance += getFloat();
     }
     return balance;
 }
 
-void printChange(float balance) {
+void printChange(double balance) {
         float denominations[] = {1000, 500, 100, 50, 20, 10, 5, 1, 0.5};
         float denom_back;
         bool rounded = false;
@@ -143,9 +134,9 @@ void printChange(float balance) {
             }
             if (denom_back > 0) {
                 if (denomination >= 1){
-                    cout << denom_back << "x" << denomination << "kr" << endl;
+                    cout << denom_back << " x " << denomination << "kr" << endl;
                 } else if (denomination == 0.5){
-                    cout << denom_back << "x" << denomination * 100 << "öre" << endl;
+                    cout << denom_back << " x " << denomination * 100 << "öre" << endl;
                 }
             }
             balance = fmod((double)balance, double(denomination));
@@ -156,7 +147,7 @@ void printChange(float balance) {
 bool askRestart() {
     //Asks if user wants to make another purchase.
     string input;
-    cout << "Vill du göra ett nytt köp? (y/n)" << endl;
+    cout << "\nVill du göra ett nytt köp? (j/n)" << endl;
     bool ans = getYesNo();
     return ans;
 }
@@ -167,14 +158,9 @@ int main() {
     printWelcome();
 
     while (on) {
-        float balance;
+        double balance = 0;
         balance = getTotal(balance);
 
-        if (balance > 0) {
-            cout << "Ange mottaget belopp:";
-            balance += getFloat();
-        }
-        //Low balance
         if (balance < 0) {
             balance = getMore(balance);
         }
@@ -188,5 +174,6 @@ int main() {
         }
         on = askRestart();
     }
+    printGoodbye();
     return 0;
 }
