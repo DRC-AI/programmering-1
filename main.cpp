@@ -125,7 +125,7 @@ float getTotal(double balance){ //returns purchase cost.
 		price = getFloat();
 		if (price < 0) {
 			if (checkPrice(price)){
-			balance = balance + price;
+				balance = balance + price;
 			} else {
 			continue;
 			}
