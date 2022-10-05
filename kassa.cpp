@@ -166,7 +166,6 @@ double roundChange(double balance) { // rounds change to nearest 50öre.
 void printChange(double balance) { // prints change in denominations.
 	float denominations[] = {1000, 500, 100, 50, 20, 10, 5, 1, 0.5};
 	float denom_back;
-	bool rounded = false;
 	balance = roundChange(balance);
 	cout << "\nÅter: " << balance << "kr\n";
 	cout << "Valörer: \n";
