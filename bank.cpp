@@ -124,7 +124,7 @@ void calcRentSavings(){
 	int years;
 	int ySaving;
 	double interest;
-	int balance = {0};
+	unsigned int balance = {0};
 	while (true){
 		cout << "Ange hur många år du vill spara: ";
 		cin >> input;
@@ -145,12 +145,12 @@ void calcRentSavings(){
 		}
 
 		cout << "Ange räntesats: ";
-		cin >> input;
-		if (validateInteger(input)){
-			interest = stod(input);
+		if (cin >> interest){
+			//interest = stod(input);
 			interest = (interest / 100.0) + 1.0;
+            cout << interest << endl;
 		} else {
-			cout << "Ogiltig data, endast heltal tillåtna" << endl;
+			cout << "Ogiltig data, endast siffor tillåtna" << endl;
 			break;
 		}
 		for (int i = 1; i < years + 1; i++){
