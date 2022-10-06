@@ -87,7 +87,7 @@ void makeWithdrawal(double* balance){
 		cout << "Ange summa för uttag: ";
 		cin >> withdrawal;
 		
-		if (isNumber(withdrawal) && isPositive(withdrawal) && *balance > 0 && *balance > stod(withdrawal)){
+		if (isNumber(withdrawal) && isPositive(withdrawal) && *balance >= 0 && *balance >= stod(withdrawal)){
 			restrictLength(pwithdrawal);
 			*balance -= stod(*pwithdrawal);
 			cout << "Saldo: " << *balance << endl;
@@ -148,7 +148,6 @@ void calcRentSavings(){
 		if (cin >> interest){
 			//interest = stod(input);
 			interest = (interest / 100.0) + 1.0;
-            cout << interest << endl;
 		} else {
 			cout << "Ogiltig data, endast siffor tillåtna" << endl;
 			break;
