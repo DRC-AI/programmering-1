@@ -3,6 +3,9 @@
 #include<string>
 using namespace std;
 
+void printGoodbye() {
+    cout << "Tack för att du använt våra tjänst, välkommen åter!" << endl;
+}
 void printWelcome() {
 	cout << "Välkommen till Banken." << endl;
 }
@@ -10,11 +13,7 @@ void printWelcome() {
 void printMenuOptions(){
 	cout << "Ange vilken tjänst du önskar använda." << endl;
 	cout << "Välj med motsvarande bokstav, tryck sedan Enter." << endl;
-	cout << "[I]nsättning" << endl;
-	cout << "[U]ttag" << endl;
-	cout << "[S]aldo" << endl;
-	cout << "[R]äntebetalning" << endl;
-	cout << "[A]vsluta" << endl;
+	cout << "[I]nsättningl [U]ttag [S]aldo [R]äntebetalning [A]vsluta" << endl;
 }
 
 int getChoice() {
@@ -37,21 +36,22 @@ void restrictLength(string* number){
 	}
 
 bool isNumber(string number) {
-	for (char num: number){
-		if (!(isdigit(num))) {
-			return false;
-		}
-	}
-	return true;
-
+    double validated;
+    try {
+        validated = stod(number);
+        return true;
+    } catch (exception& except1) {
+        cout << "Fel format på inmatning." << endl;
+        return false;
+    }
 }
 
 bool isPositive(string number) {
-	if (number[0] == '-'){
-		return false;
-	} else {
-		return true;
-	}
+    if (number[0] == '-'){
+        return false;
+        } else {
+            return true;
+        }
 }
 
 
@@ -135,7 +135,7 @@ void calcRentSavings(){
 			break;
 		}
 
-		cout << "Ange sparande per år: ";
+		cout << "Ange insättning per år: ";
 		cin >> input;
 		if (validateInteger(input)){
 			ySaving = stoi(input);
@@ -144,7 +144,7 @@ void calcRentSavings(){
 			break;
 		}
 
-		cout << "Ange ränta i procent: ";
+		cout << "Ange räntesats: ";
 		cin >> input;
 		if (validateInteger(input)){
 			interest = stod(input);
@@ -153,12 +153,10 @@ void calcRentSavings(){
 			cout << "Ogiltig data, endast heltal tillåtna" << endl;
 			break;
 		}
-
-		cout << "År" << " " << "Värde" << endl;
 		for (int i = 1; i < years + 1; i++){
 			balance = (balance + ySaving) * interest;	
-			cout << i << "  " << balance << endl;
 		}
+        cout << "Efter "<< years << " års sparande skulle du ha " << balance << "kr på kontot." << endl;
 		break;
 	}
 }
@@ -195,6 +193,7 @@ int main() {
 				cout << "Valet matchade inget av alternativen" << endl;
 				continue;
 		}
-	return 1;
 	}
+    printGoodbye();
+	return 1;
 }
