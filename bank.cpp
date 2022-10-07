@@ -11,6 +11,8 @@ void printWelcome() {
 }
 
 void printMenuOptions(){
+    cout << fixed;
+    cout.precision(2);
 	cout << "Ange vilken tjänst du önskar använda." << endl;
 	cout << "Välj med motsvarande bokstav, tryck sedan Enter." << endl;
 	cout << "[I]nsättningl [U]ttag [S]aldo [R]äntebetalning [A]vsluta" << endl;
@@ -146,7 +148,6 @@ void calcRentSavings(){
 
 		cout << "Ange räntesats: ";
 		if (cin >> interest){
-			//interest = stod(input);
 			interest = (interest / 100.0) + 1.0;
 		} else {
 			cout << "Ogiltig data, endast siffor tillåtna" << endl;
