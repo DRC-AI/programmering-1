@@ -4,14 +4,14 @@
 using namespace std;
 
 void printGoodbye() {
-    cout << "Tack för att du använt våra tjänst, välkommen åter!" << endl;
+    cout << "Tack för att du använt vår tjänst, välkommen åter!" << endl;
 }
 void printWelcome() {
 	cout << "Välkommen till Banken." << endl;
 }
 
 void printMenuOptions(){
-    cout << fixed;
+    cout << fixed; // Ändra cout till att inte visa nummer i grundpotensform. 
     cout.precision(2);
 	cout << "Ange vilken tjänst du önskar använda." << endl;
 	cout << "Välj med motsvarande bokstav, tryck sedan Enter." << endl;
@@ -21,13 +21,13 @@ void printMenuOptions(){
 int getChoice() {
 	char choice;	
 	while (true){
-		if (cin >> choice){
-			choice = tolower(choice);
-			return (int)choice;
+		if (cin >> choice){ // ser till att choice endast godkänner rätt datatyp.
+			choice = tolower(choice); // formaterar input för enhetlighet i resten av programmet.
+			return (int)choice; // (int) för att switch satsen jämför char ASCII värde.
 		}
 	}
 }
-void restrictLength(string* number){
+void restrictLength(string* number){ // rundar värde för säkerhet och stabilitet.
 	double temp = stof(*number);
 
 	temp = temp * 100;
@@ -37,7 +37,7 @@ void restrictLength(string* number){
 	*number = to_string(temp);
 	}
 
-bool isNumber(string number) {
+bool isNumber(string number) { // validering av input.
     double validated;
     try {
         validated = stod(number);
@@ -48,7 +48,7 @@ bool isNumber(string number) {
     }
 }
 
-bool isPositive(string number) {
+bool isPositive(string number) { // kontrollerar om nummer är positivt eller negativt.
     if (number[0] == '-'){
         return false;
         } else {
@@ -64,8 +64,8 @@ void makeDeposit(double* balance){
 		cout << "Ange summa för insättning: ";
 		cin >> deposit;
 		
-		if (isNumber(deposit) && isPositive(deposit)){
-			restrictLength(pDeposit);
+		if (isNumber(deposit) && isPositive(deposit)){ // måste vara ett positivt nummer.
+			restrictLength(pDeposit); // rundar för säkerhet.
 			*balance += stod(*pDeposit);
 			cout << "Saldo: " << *balance << endl;
 			break;
@@ -148,13 +148,14 @@ void calcRentSavings(){
 
 		cout << "Ange räntesats: ";
 		if (cin >> interest){
-			interest = (interest / 100.0) + 1.0;
+			interest = (interest / 100.0) + 1.0; // formatterar räntesats till motsvarande förändringsfaktor.
 		} else {
 			cout << "Ogiltig data, endast siffor tillåtna" << endl;
 			break;
 		}
 		for (int i = 1; i < years + 1; i++){
-			balance = (balance + ySaving) * interest;	
+            // Algoritm för uträkning av ränta på ränta effekt.
+			balance = (balance + ySaving) * interest;
 		}
         cout << "Efter "<< years << " års sparande skulle du ha " << balance << "kr på kontot." << endl;
 		break;
@@ -171,7 +172,7 @@ int main() {
 	printWelcome();
 	while (on){
 		printMenuOptions();
-		int choice = getChoice();
+		int choice = getChoice(); // jämför ASCII värde för val.
 
 		switch (choice){
 			case (int)'i':
