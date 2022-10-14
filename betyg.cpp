@@ -33,6 +33,10 @@ void skrivUtBetyg(string *amnen, char *betyg){
 }
 void statistik(int *poang, char *betyg){
     //räkna ihop poäng
+    //Pseudokod
+    //
+    //För varje poäng i poang array, 
+    //totala poäng = totala poäng + poäng.
     int poang_totalt = {0};
     for (int i = 0; i <= 4; i++){
         poang_totalt += *(poang + i);
@@ -40,6 +44,15 @@ void statistik(int *poang, char *betyg){
     cout << "Totalt antal poäng: " << poang_totalt << endl;
 
     //räkna ihop betyg
+    //Pseudokod
+    //
+    //För varje betyg i betyg array
+    //  om betyg = A
+    //      antal a = antal a + 1
+    //  om betyg = C
+    //      antal c = antal c + 1
+    //  om betyg = F
+    //      antal f = antal f + 1
     int antal_a = {0};
     int antal_c = {0};
     int antal_f = {0};
