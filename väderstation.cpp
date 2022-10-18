@@ -13,7 +13,7 @@ class stad {
         }
     public:
         string ToString(){
-            return "Stad: " + namn + "\nTemperatur: " + to_string(temp);
+            return "Namn: " + namn + "\nTemperatur: " + to_string(temp) + "\n";
         }
 };
 
@@ -47,33 +47,45 @@ void bubblesort(stad städer[], int antal_städer){
     }
 }
 
-
-
 int main() {
-    stad städer[10];
-
-    städer[0] = stad("norrköping", 14);
-    städer[1] = stad("söderköping", 11); 
-    städer[2] = stad("stockholm", 13);
-    städer[3] = stad("funäsdalen", 7);
-    städer[4] = stad("borås", 10);
-
-    int antal_städer = 5;
-
-    //cout << "Antal städer: ";
-    //cin >> antal_städer;
-    //for (int i = 0; i < antal_städer; i++){
-    //    cout << "Ange Namn: ";
-    //    städer[i].hämtaNamn();
-    //    cout << "Ange Temperatur: ";
-    //    städer[i].hämtaTemp();
-    //}
+    stad städer[255];
     stad *pStäder = städer;
-
-    bubblesort(pStäder, antal_städer);
+    string namn;
+    int temp;
+    int antal_städer;
+    
+    cout << "ANGE ANTAL STÄDER DU VILL LÄGGA TILL: ";
+    cin >> antal_städer;
 
     for (int i = 0; i < antal_städer; i++){
-        cout << städer[i].namn << " " << städer[i].temp << "\n";
+        cout << "VÄRDEN STAD NUMMER " << i + 1 << endl;
+        cout << "NAMN: ";
+        cin >> namn;
+        cout << "TEMPERATUR: ";
+        cin >> temp;
+        städer[i] = stad(namn, temp); 
+    }
+
+    //städer[0] = stad("norrköping", 14);
+    //städer[1] = stad("söderköping", 11); 
+    //städer[2] = stad("stockholm", 13);
+    //städer[3] = stad("funäsdalen", 7);
+    //städer[4] = stad("borås", 10);
+
+    bubblesort(städer, antal_städer);
+
+    cout << "\n\nAlla Angivna länder sorterade efter temperatur." << endl;
+    for (int i = antal_städer -1; i >= 0; i--){
+        cout << städer[i].ToString() ;
+    }
+    cout << "\n\nSöker igenom städer för temperaturen 10..." << endl;
+    int index = linsok(städer, antal_städer, 10);
+        if (index == -1){
+            cout << "Finns ingen stad med temperaturen 10." << endl;
+        } else {
+            cout << "Stad med temperatur 10 hittades!" << endl;
+            cout << "Staden har index: " << index << endl;
+            cout << städer[index].ToString() << endl;
     }
 
 }
